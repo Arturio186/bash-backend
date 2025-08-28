@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 
+const router = require('./routes');
+
 const PORT = process.env.PORT || 3000;
 const environment = process.env.NODE_ENV || 'development';
 
@@ -22,6 +24,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+app.use('/api', router);
 
 app.use(express.json());
 
