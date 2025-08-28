@@ -1,9 +1,7 @@
-const userController = require('./userController');
-const operatorController = require('./operatorController');
-const applicationController = require('./applicationController');
+const usersController = require('./usersController');
+const applicationsController = require('./applicationsController');
 
 module.exports = {
-  userController,
-  operatorController,
-  applicationController
+  usersController,
+  applicationsController
 };

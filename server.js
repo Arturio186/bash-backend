@@ -1,5 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const http = require('http');
+const { Server } = require('socket.io');
 
 const router = require('./routes');
 
@@ -7,6 +10,13 @@ const PORT = process.env.PORT || 3000;
 const environment = process.env.NODE_ENV || 'development';
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: ['http://localhost:5173'], // Хост фронта
+    credentials: true
+  }
+});
 
 const allowedOrigins = [
   'http://localhost:5173'
@@ -24,12 +34,16 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
+app.use(express.json());
 app.use('/api', router);
 
-app.use(express.json());
+app.post('/api/send-message', (req, res) => {
+  io.emit('needRefresh');
 
-app.listen(PORT, () => {
+  res.json({ status: 'ok' });
+});
+
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${environment}`);
-}); 
+});
