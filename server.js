@@ -37,13 +37,11 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/api', router);
 
-app.post('/api/send-message', (req, res) => {
-  io.emit('needRefresh');
-
-  res.json({ status: 'ok' });
-});
-
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${environment}`);
 });
+
+module.exports = {
+  io // io.emit('needRefresh');
+}
