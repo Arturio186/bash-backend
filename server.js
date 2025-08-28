@@ -1,5 +1,4 @@
 const express = require('express');
-const cron = require('node-cron');
 const cors = require('cors');
 
 const PORT = process.env.PORT || 3000;
@@ -8,7 +7,6 @@ const environment = process.env.NODE_ENV || 'development';
 const app = express();
 
 const allowedOrigins = [
-  'https://arturio186-crypto-frontend-02c6.twc1.net',
   'http://localhost:5173'
 ];
 
