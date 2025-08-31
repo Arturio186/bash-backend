@@ -1,9 +1,13 @@
 const {Router} = require('express');
+const {applicationsController} = require('../controllers');
+const authMiddleware = require('../middlewares/authMiddleware');
 
 const router = Router();
 
-router.get('/', (req, res) => {})
-router.post('/add', (req, res) => {});
-router.delete('/{id}', (req, res) => {});
+router.get('/:date', authMiddleware, applicationsController.getByDate);
+router.delete('/{id}', authMiddleware, applicationsController.delete);
+
+router.get('/availableHours/:date', applicationsController.getAvailableHours);  
+router.post('/add', applicationsController.add);
 
 module.exports = router;
