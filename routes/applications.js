@@ -4,11 +4,12 @@ const authMiddleware = require('../middlewares/authMiddleware');
 
 const router = Router();
 
+router.get('/availableHours/:date', applicationsController.getAvailableHours); 
+router.get('/randomOperator', applicationsController.getRandomOperator); 
+router.post('/add', applicationsController.add);
+
 router.get('/:date', authMiddleware, applicationsController.getByDate);
 router.delete('/:id', authMiddleware, applicationsController.delete);
-
-router.get('/availableHours/:date', applicationsController.getAvailableHours);  
-router.post('/add', applicationsController.add);
 
 
 module.exports = router;

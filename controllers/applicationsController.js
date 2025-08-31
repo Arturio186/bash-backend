@@ -151,8 +151,15 @@ class ApplicationsController {
       console.error(err);
       res.status(500).json({ error: err.message });
     }
-}
+  }
 
+  async getRandomOperator(_, res) {
+    const operators = await db("operators").pluck("tg_username");
+
+    const randomOperator = operators[Math.floor(Math.random() * operators.length)];
+
+    res.status(200).json({ operator: randomOperator });
+  }
 }
 module.exports = new ApplicationsController();
 
