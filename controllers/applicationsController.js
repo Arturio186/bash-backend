@@ -1,5 +1,6 @@
 require('dotenv').config();
-const {DateTime} = require("luxon");
+const {DateTime} = require('luxon');
+const axios = require('axios');
 const db = require('../database/db');
 
 class ApplicationsController {
@@ -17,11 +18,12 @@ class ApplicationsController {
         .first();
 
       if (existingApp) {
-        return res.status(400).json({ error: "У пользователя уже есть активная заявка на будущее/сейчас" });
+        return res.status(400).json({ error: "У Вас уже есть активная запись" });
       }
 
       const busyOperators = await db("applications")
-        .whereRaw(`to_timestamp(date || ' ' || time, 'YYYY-MM-DD HH24:MI:SS') >= ?`, [nowTimestamp])
+        .where("date", date)
+        .where("time", time)
         .pluck("operator_id");
 
       const freeOperators = await db("operators")
@@ -94,8 +96,6 @@ class ApplicationsController {
       let slotStart = DateTime.fromFormat(interval.start.split('.')[0], "HH:mm:ss", { zone: "Europe/Moscow" });
       const slotEnd = DateTime.fromFormat(interval.end.split('.')[0], "HH:mm:ss", { zone: "Europe/Moscow" });
 
-      console.log({slotStart, slotEnd, interval, date, apps, operators});
-
       while (slotStart < slotEnd) {
         const slotTimeStr = slotStart.toFormat("HH:mm:ss");
 
@@ -110,7 +110,13 @@ class ApplicationsController {
         slotStart = slotStart.plus({ minutes: 15 });
       }
       
-      res.status(200).json({ date, freeSlots });
+      res.status(200).json(
+        freeSlots.map((time) => {
+          const parts = time.split(':');
+
+          return `${parts[0]}:${parts[1]}`; 
+        }) 
+      );
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: err.message });
@@ -159,6 +165,16 @@ class ApplicationsController {
     const randomOperator = operators[Math.floor(Math.random() * operators.length)];
 
     res.status(200).json({ operator: randomOperator });
+  }
+
+  async getUSDTRate(req, res) {
+    const response = await axios.get('https://api.rapira.net/open/market/rates');
+
+    const rates = response.data.data;
+
+    const usdtRate = rates.find(rate => rate.symbol === 'USDT/RUB');
+
+    res.status(200).json(usdtRate);
   }
 }
 module.exports = new ApplicationsController();

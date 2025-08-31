@@ -4,6 +4,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 
 const router = Router();
 
+router.get('/getRate', applicationsController.getUSDTRate);
 router.get('/availableHours/:date', applicationsController.getAvailableHours); 
 router.get('/randomOperator', applicationsController.getRandomOperator); 
 router.post('/add', applicationsController.add);
