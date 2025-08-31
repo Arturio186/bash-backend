@@ -14,6 +14,10 @@ module.exports = (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
+
+    if (!decoded.isActive) {
+      return res.status(403).json({message: "Пользователь не активен"});
+    } 
     
     req.user = decoded;
 

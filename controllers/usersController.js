@@ -4,9 +4,9 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/userModel');
 
-const generateJWT = (id, username) => {
+const generateJWT = (id, username, isActive) => {
   return jwt.sign(
-    {id, username}, 
+    {id, username, isActive}, 
     process.env.SECRET_KEY, 
     {expiresIn: "24h"}
   );
@@ -27,7 +27,7 @@ class UserController {
     
     const user = await User.create({username, password: hashPassword});
 
-    const token = generateJWT(user.id, user.username);
+    const token = generateJWT(user.id, user.username, user.is_active);
     
     return res.status(200).json({token});
   }
@@ -47,7 +47,7 @@ class UserController {
       return res.status(400).json({message: "Неверный пароль"});
     }
     
-    const token = generateJWT(user.id, user.username);
+    const token = generateJWT(user.id, user.username, user.is_active);
 
     return res.status(200).json({token});
   }

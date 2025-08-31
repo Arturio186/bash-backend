@@ -114,6 +114,7 @@ class ApplicationsController {
       res.status(500).json({ error: err.message });
     }
   }
+  
   async getByDate(req, res) {
     try {
       const { date } = req.params;
