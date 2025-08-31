@@ -5,8 +5,8 @@
 exports.up = function (knex) {
   return knex.schema.createTable("hours", (table) => {
     table.increments("id").primary();  
-    table.time("start_time").notNullable();       
-    table.time("end_time").notNullable();
+    table.time("start").notNullable();       
+    table.time("end").notNullable();
   });
 };
 

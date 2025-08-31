@@ -8,7 +8,7 @@ exports.up = function (knex) {
     table.string("username").notNullable().unique(); 
     table.string("password").notNullable();       
     table.timestamps(true, true);
-    table.boolean("is_active").notNullable();               
+    table.boolean("is_active").notNullable().defaultTo(false);               
   });
 };
 

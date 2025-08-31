@@ -1,23 +1,19 @@
 const db = require('../database/db');
 
 class User {
-  static async create(surname, name, password, email, birth_date, gender) {
+  static async create({username, password}) {
     const [user] = await db('users')
       .returning('*')
       .insert({ 
-        surname: surname, 
-        name: name,
-        email: email,
-        password: password,
-        birth_date: birth_date,
-        gender: gender
+        username,
+        password
     });
 
     return user;
   }
 
-  static async getUserByEmail(email) {
-    const user = await db('users').where({email}).first();
+  static async getUser(username) {
+    const user = await db('users').where({username}).first();
     return user;
   }
 } 

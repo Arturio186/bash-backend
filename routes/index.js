@@ -5,7 +5,7 @@ const applicationsRouter = require('./applications');
 
 const router = Router();
 
-router.use('/user', usersRouter);
+router.use('/users', usersRouter);
 router.use('/applications', applicationsRouter);
 
 module.exports = router;

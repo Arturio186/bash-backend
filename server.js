@@ -33,7 +33,7 @@ const corsOptions = {
   credentials: true
 };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions)); - Вернуть на проде
 app.use(express.json());
 app.use('/api', router);
 

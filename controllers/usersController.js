@@ -4,10 +4,9 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/userModel');
 
-
-const generateJWT = (id, email) => {
+const generateJWT = (id, username) => {
   return jwt.sign(
-    {id, email}, 
+    {id, username}, 
     process.env.SECRET_KEY, 
     {expiresIn: "24h"}
   );
@@ -16,30 +15,30 @@ const generateJWT = (id, email) => {
 
 class UserController {
   async register(req, res) {
-    const {surname, name, email, password, birth_date, gender} = req.body;
+    const {username, password} = req.body;
     
-    const candidate = await User.getUserByEmail(email);
+    const candidate = await User.getUser(username);
 
     if (candidate) {
-      return res.status(400).json({message: "Пользователь с таким e-mail уже существует"});
+      return res.status(400).json({message: "Пользователь с таким именем уже существует"});
     }
     
     const hashPassword = await bcrypt.hash(password, 5);
     
-    const user = await User.create(surname, name, hashPassword, email, birth_date, gender);
+    const user = await User.create({username, password: hashPassword});
 
-    const token = generateJWT(user.id, user.email);
+    const token = generateJWT(user.id, user.username);
     
-    return res.json({token});
+    return res.status(200).json({token});
   }
 
   async login(req, res) {
-    const {email, password} = req.body;
+    const {username, password} = req.body;
 
-    const user = await User.getUserByEmail(email); 
+    const user = await User.getUser(username); 
 
     if (!user) {
-      return res.status(400).json({message: "Пользователь с таким e-mail не найден"});
+      return res.status(400).json({message: "Пользователь с таким имененм не найден"});
     }
 
     const comparePassword = await bcrypt.compare(password, user.password);
@@ -48,9 +47,9 @@ class UserController {
       return res.status(400).json({message: "Неверный пароль"});
     }
     
-    const token = generateJWT(user.id, user.email);
+    const token = generateJWT(user.id, user.username);
 
-    return res.json({token});
+    return res.status(200).json({token});
   }
 }
 
