@@ -91,8 +91,10 @@ class ApplicationsController {
     
       const freeSlots = [];
 
-      let slotStart = DateTime.fromFormat(interval.start, "HH:mm:ss", { zone: "Europe/Moscow" });
-      const slotEnd = DateTime.fromFormat(interval.end, "HH:mm:ss", { zone: "Europe/Moscow" });
+      let slotStart = DateTime.fromFormat(interval.start.split('.')[0], "HH:mm:ss", { zone: "Europe/Moscow" });
+      const slotEnd = DateTime.fromFormat(interval.end.split('.')[0], "HH:mm:ss", { zone: "Europe/Moscow" });
+
+      console.log({slotStart, slotEnd, interval, date, apps, operators});
 
       while (slotStart < slotEnd) {
         const slotTimeStr = slotStart.toFormat("HH:mm:ss");
@@ -114,7 +116,7 @@ class ApplicationsController {
       res.status(500).json({ error: err.message });
     }
   }
-  
+
   async getByDate(req, res) {
     try {
       const { date } = req.params;
@@ -128,8 +130,12 @@ class ApplicationsController {
       }
 
       const applications = await db("applications")
-        .where("date", date)
-        .select("id", "tg_username", "time", "network", "amount", "type", "address", "operator_id");
+        .join("operators", "applications.operator_id", "operators.id") // джоиним таблицу operators
+        .where("applications.date", date)
+        .select(
+          "*"
+        );
+
 
       const result = {
         hours: {
