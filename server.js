@@ -19,7 +19,7 @@ const io = new Server(server, {
 });
 
 const allowedOrigins = [
-  'http://localhost:5173'
+  'https://arturio186-bash-miniapp-c26e.twc1.net'
 ];
 
 const corsOptions = {
