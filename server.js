@@ -44,5 +44,5 @@ server.listen(PORT, () => {
 });
 
 module.exports = {
-  io // io.emit('needRefresh');
+  io
 }

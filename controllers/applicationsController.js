@@ -1,5 +1,6 @@
 require('dotenv').config();
 const {DateTime} = require('luxon');
+const {io} = require('../server');
 const axios = require('axios');
 const db = require('../database/db');
 
@@ -54,6 +55,8 @@ class ApplicationsController {
           text: `Ваша заявка принята!\nОператор @${randomOperator.tg_username} свяжется с Вами.`
         });
       }
+
+      io.emit('needRefresh');
 
       res.status(201).json({ id: inserted.id, operator_id: randomOperator.id });
     } catch (err) {
