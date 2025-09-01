@@ -146,7 +146,8 @@ class ApplicationsController {
         .join("operators", "applications.operator_id", "operators.id") // джоиним таблицу operators
         .where("applications.date", date)
         .select(
-          "*"
+          "applications.*",
+          'operators.tg_username as operator_username'
         );
 
 
@@ -161,7 +162,6 @@ class ApplicationsController {
       res.status(200).json(result);
 
     } catch (err) {
-      console.error(err);
       res.status(500).json({ error: err.message });
     }
   }

@@ -24,6 +24,6 @@ module.exports = (req, res, next) => {
     next();
   }   
   catch (e) {
-    res.status(401).json({message: "Не авторизован"});
+    res.status(500).json({message: "Неизвестная ошибка"});
   }
 }
