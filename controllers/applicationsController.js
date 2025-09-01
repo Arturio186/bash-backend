@@ -6,7 +6,7 @@ const db = require('../database/db');
 class ApplicationsController {
   async add(req, res) {
     try {
-      const { tg_username, time, network, amount, type, address, date } = req.body;
+      const { tg_username, time, network, amount, type, address, date, chat_id } = req.body;
 
       const nowMSK = DateTime.now().setZone("Europe/Moscow");
       const nowDate = date || nowMSK.toFormat("yyyy-MM-dd");
@@ -47,6 +47,13 @@ class ApplicationsController {
           operator_id: randomOperator.id,
         })
         .returning("id");
+
+      if (chat_id) {
+        await axios.get(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
+          chat_id,
+          text: `Ваша заявка принята!\nОператор @${randomOperator.tg_username} свяжется с Вами.`
+        });
+      }
 
       res.status(201).json({ id: inserted.id, operator_id: randomOperator.id });
     } catch (err) {
