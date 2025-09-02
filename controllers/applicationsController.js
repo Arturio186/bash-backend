@@ -50,7 +50,7 @@ class ApplicationsController {
         .returning("id");
 
       if (chat_id) {
-        await axios.get(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
+        await axios.post(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, {
           chat_id,
           text: `Ваша заявка принята!\nОператор @${randomOperator.tg_username} свяжется с Вами.`
         });
