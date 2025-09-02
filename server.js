@@ -36,13 +36,14 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+
+app.use((req, _, next) => {
+  req.io = io;
+  next();
+});
 app.use('/api', router);
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${environment}`);
 });
-
-module.exports = {
-  io
-}

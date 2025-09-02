@@ -1,6 +1,5 @@
 require('dotenv').config();
 const {DateTime} = require('luxon');
-const {io} = require('../server');
 const axios = require('axios');
 const db = require('../database/db');
 
@@ -56,7 +55,7 @@ class ApplicationsController {
         });
       }
 
-      io.emit('needRefresh');
+      req.io.emit('needRefresh');
 
       res.status(201).json({ id: inserted.id, operator_id: randomOperator.id });
     } catch (err) {
