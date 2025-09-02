@@ -19,7 +19,7 @@ const io = new Server(server, {
 });
 
 const allowedOrigins = [
-  'https://arturio186-bash-miniapp-c26e.twc1.net',
+  'https://arturio186-bash-miniapp-c26e.twc1.net/',
   'https://arturio186-bash-frontend-73d6.twc1.net'
 ];
 
