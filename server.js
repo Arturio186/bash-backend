@@ -13,14 +13,14 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:5173'], // Хост фронта
+    origin: ['https://arturio186-bash-miniapp-c26e.twc1.net'], // Хост фронта
     credentials: true
   }
 });
 
 const allowedOrigins = [
   'https://arturio186-bash-miniapp-c26e.twc1.net',
-  'http://localhost:5173'
+  'https://arturio186-bash-frontend-73d6.twc1.net'
 ];
 
 const corsOptions = {
